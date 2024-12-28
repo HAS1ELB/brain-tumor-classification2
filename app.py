@@ -11,12 +11,9 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 # Telecharger les models
 def download_model_from_drive(url, output_path):
-    """
-    Télécharge un fichier Google Drive et le sauvegarde dans le chemin spécifié.
-    Args:
-        url (str): Lien partagé de Google Drive.
-        output_path (str): Chemin local où sauvegarder le fichier.
-    """
+    # Assurez-vous que le répertoire existe
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    
     if not os.path.exists(output_path):
         print(f"Téléchargement du fichier depuis Google Drive : {output_path}")
         gdown.download(url, output_path, quiet=False)
