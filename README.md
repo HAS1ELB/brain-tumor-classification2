@@ -69,8 +69,8 @@ HAS1ELB-brain-tumor-classification2/
 
 1. Clonez le dépôt :
    ```bash
-   git clone https://github.com/your-repo/brain-tumor-classification.git
-   cd brain-tumor-classification
+   git clone https://github.com/HAS1ELB/brain-tumor-classification2
+   cd brain-tumor-classification2
    ```
 2. Créez un environnement virtuel :
    ```bash
