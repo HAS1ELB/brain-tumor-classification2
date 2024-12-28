@@ -1,0 +1,7 @@
+/venv
+best*
+notebooks/train_model_from_scratch.ipynb
+scripts/cnn_scratch.py
+data/processed/*.h5
+data/processed/*.npz
+*.keras
