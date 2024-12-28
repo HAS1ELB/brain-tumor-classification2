@@ -9,7 +9,7 @@ Ce projet vise à classer les tumeurs cérébrales en quatre catégories : **gli
 ## 🌐 **Application Déployée**
 
 L'application est déployée et accessible publiquement à l'adresse suivante :
-👉 [**Brain Tumor Classification App**](https://brain-tumor-classification2-ndbdfjfuzyhp3j2slhqzl2.streamlit.app/)
+👉 [**Brain Tumor Classification App**](https://brain-tumor-classification2-neu3hwybgrtnhbasibdmln.streamlit.app/)
 
 ---
 
