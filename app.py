@@ -9,6 +9,11 @@ import gdown
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
+# Chemin du dossier
+folder_path = 'models'
+
+# Créer le dossier s'il n'existe pas
+os.makedirs(folder_path, exist_ok=True)
 # Telecharger les models
 def download_model_from_drive(url, output_path):
     # Assurez-vous que le répertoire existe
