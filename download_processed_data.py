@@ -1,6 +1,12 @@
 import os
 import gdown
 
+# Chemin du dossier
+folder_path = 'data/processed'
+
+# Créer le dossier s'il n'existe pas
+os.makedirs(folder_path, exist_ok=True)
+
 def download_processed_data_from_drive(url, output_path):
     """
     Télécharge un fichier partagé depuis Google Drive.
