@@ -6,6 +6,13 @@ Ce projet vise à classer les tumeurs cérébrales en quatre catégories : **gli
 
 ---
 
+## 🌐 **Application Déployée**
+
+L'application est déployée et accessible publiquement à l'adresse suivante :
+👉 [**Brain Tumor Classification App**](https://brain-tumor-classification2-ndbdfjfuzyhp3j2slhqzl2.streamlit.app/)
+
+---
+
 ## 📂 **Structure du Répertoire**
 
 ```
@@ -62,8 +69,8 @@ HAS1ELB-brain-tumor-classification2/
 
 1. Clonez le dépôt :
    ```bash
-   git clone https://github.com/HAS1ELB/brain-tumor-classification2
-   cd brain-tumor-classification2
+   git clone https://github.com/your-repo/brain-tumor-classification.git
+   cd brain-tumor-classification
    ```
 2. Créez un environnement virtuel :
    ```bash
@@ -124,7 +131,7 @@ streamlit run app.py
 
 ---
 
-## 📈 **Évaluation et Comparaison des Modèles**
+## 📈 **Évaluation Et Comparaison des Modèles**
 
 Pour évaluer les performances :
 
@@ -149,6 +156,8 @@ docker run -p 8501:8501 brain-tumor-classification
 
 - **EL BAHRAOUI HASSAN**
 - **Malek Sami**
+
+---
 
 ## 🤝 **Contributions**
 
