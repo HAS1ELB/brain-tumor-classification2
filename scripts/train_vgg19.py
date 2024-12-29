@@ -1,6 +1,6 @@
 import tensorflow as tf
-from tensorflow.keras.applications import VGG19  # Importer VGG19 au lieu de VGG16
-from tensorflow.keras.models import Model, Sequential
+from tensorflow.keras.applications import VGG19 
+from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Flatten, Dropout
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
@@ -8,11 +8,20 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import warnings
+import os
 
 warnings.filterwarnings("ignore")
 
+# Définition des chemins relatifs dynamiquement
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, "..", "data", "processed")
+MODEL_DIR = os.path.join(BASE_DIR, "..", "models")
+
+TRAIN_DATA_PATH = os.path.join(DATA_DIR, "training_data.npz")
+MODEL_SAVE_PATH = os.path.join(MODEL_DIR, "vgg19_model.keras")
+
 # Charger les données prétraitées
-data = np.load(r"C:\Users\HP\Desktop\brain-tumor-classification\data\processed\training_data.npz")
+data = np.load(TRAIN_DATA_PATH)
 X, y, classes = data['X'], data['y'], data['classes']
 
 # Diviser les données
@@ -28,10 +37,10 @@ for layer in base_model.layers:
 # Ajouter des couches personnalisées
 model = Sequential([
     base_model,
-    Flatten(),  # Aplatir les sorties de la dernière couche convolutionnelle
+    Flatten(),
     Dense(256, activation='relu'),
-    Dropout(0.5),  # Dropout pour éviter le surapprentissage
-    Dense(len(classes), activation='softmax')  # Couche finale pour les classes
+    Dropout(0.5),
+    Dense(len(classes), activation='softmax')
 ])
 
 # Compiler le modèle
@@ -43,7 +52,7 @@ model.compile(optimizer=Adam(learning_rate=0.001),
 callbacks = [
     EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True, verbose=1),
     ModelCheckpoint(
-        filepath=r"C:\Users\HP\Desktop\brain-tumor-classification\models\vgg19_model.keras",  # Renommé pour VGG19
+        filepath=MODEL_SAVE_PATH, 
         monitor='val_accuracy',
         save_best_only=True,
         verbose=1
@@ -63,7 +72,6 @@ history = model.fit(X_train, y_train,
                     epochs=20, 
                     batch_size=32,
                     callbacks=callbacks)
-
 
 # Visualisation de l'entraînement
 plt.plot(history.history['accuracy'], label='Train Accuracy')

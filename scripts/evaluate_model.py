@@ -1,15 +1,20 @@
 # evaluate_model.py - Évaluation du modèle de classification des tumeurs cérébrales
 
+import os
 import numpy as np
 import tensorflow as tf
 from sklearn.metrics import confusion_matrix, classification_report
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Chemins par défaut
-TEST_DATA_PATH = "../data/processed/testing_data.npz"
-MODEL_PATH = "../models/final_model.keras"
-OUTPUT_DIR = "../logs"
+# Définir les chemins dynamiquement
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TEST_DATA_PATH = os.path.join(BASE_DIR, "..", "data", "processed", "testing_data.npz")
+MODEL_PATH = os.path.join(BASE_DIR, "..", "models", "final_model.keras")
+OUTPUT_DIR = os.path.join(BASE_DIR, "..", "logs")
+
+# Créer le répertoire de sortie s'il n'existe pas
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 def load_testing_data(data_path):
     """
@@ -21,13 +26,16 @@ def load_testing_data(data_path):
         y (numpy array): Labels réels encodés en one-hot.
         classes (list): Liste des noms des classes.
     """
-    print("Chargement des données de test...")
-    data = np.load(data_path)
-    X = data['X'] / 255.0  # Normalisation des images
-    y = data['y']
-    classes = data['classes']
-    print(f"Nombre d'images : {len(X)}, Classes : {classes}")
-    return X, y, classes
+    print(f"📂 Chargement des données de test depuis : {os.path.abspath(data_path)}")
+    try:
+        data = np.load(data_path)
+        X = data['X']  # Normalisation des images
+        y = data['y']
+        classes = data['classes']
+        print(f"✅ Nombre d'images : {len(X)}, Classes : {classes}")
+        return X, y, classes
+    except FileNotFoundError:
+        raise FileNotFoundError(f"❌ Fichier non trouvé : {os.path.abspath(data_path)}")
 
 def evaluate_model(model, X_test, y_test):
     """
@@ -40,9 +48,12 @@ def evaluate_model(model, X_test, y_test):
         y_pred (numpy array): Prédictions du modèle.
         accuracy (float): Précision globale sur les données de test.
     """
-    print("Évaluation du modèle...")
-    loss, accuracy = model.evaluate(X_test, tf.keras.utils.to_categorical(y_test), verbose=1)
-    print(f"Précision sur les données de test : {accuracy:.2%}")
+    print("🧠 Évaluation du modèle...")
+
+    # Ne pas convertir les labels en one-hot
+    # Utiliser sparse_categorical_crossentropy
+    loss, accuracy = model.evaluate(X_test, y_test, verbose=1)
+    print(f"✅ Précision sur les données de test : {accuracy:.2%}")
     
     # Prédictions
     y_pred = np.argmax(model.predict(X_test), axis=1)
@@ -63,9 +74,10 @@ def plot_confusion_matrix(y_true, y_pred, classes, output_dir):
     plt.xlabel("Prédictions")
     plt.ylabel("Réel")
     plt.title("Matrice de Confusion")
-    plt.savefig(f"{output_dir}/confusion_matrix.png")
+    output_path = os.path.join(output_dir, "confusion_matrix.png")
+    plt.savefig(output_path)
     plt.show()
-    print("Matrice de confusion sauvegardée.")
+    print(f"✅ Matrice de confusion sauvegardée dans : {os.path.abspath(output_path)}")
 
 def print_classification_report(y_true, y_pred, classes):
     """
@@ -76,7 +88,7 @@ def print_classification_report(y_true, y_pred, classes):
         classes (list): Noms des classes.
     """
     report = classification_report(y_true, y_pred, target_names=classes)
-    print("Rapport de classification :\n")
+    print("\n📝 Rapport de classification :\n")
     print(report)
 
 def main():
@@ -87,8 +99,11 @@ def main():
     X_test, y_test, classes = load_testing_data(TEST_DATA_PATH)
     
     # Charger le modèle sauvegardé
-    print("Chargement du modèle sauvegardé...")
-    model = tf.keras.models.load_model(MODEL_PATH)
+    print(f"📂 Chargement du modèle depuis : {os.path.abspath(MODEL_PATH)}")
+    try:
+        model = tf.keras.models.load_model(MODEL_PATH)
+    except FileNotFoundError:
+        raise FileNotFoundError(f"❌ Modèle non trouvé : {os.path.abspath(MODEL_PATH)}")
     
     # Évaluer le modèle
     y_pred, accuracy = evaluate_model(model, X_test, y_test)
